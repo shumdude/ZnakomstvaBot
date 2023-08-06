@@ -6,9 +6,7 @@ from tortoise import Tortoise
 import handlers
 from aiogram import Bot, Dispatcher
 from config import Config, load_config
-from apscheduler.schedulers.asyncio import AsyncIOScheduler  # библиотека для уведомлений в телеграм
-from dateutil.tz import tzoffset  # библиотека для работы со временем
-from middlewares import ApschedulerMiddleware, DatabaseMiddleware
+from middlewares import DatabaseMiddleware
 
 
 # Function to create pool with database
@@ -37,11 +35,6 @@ async def start():
     # DatabaseMiddleware
     pool_connect = await create_pool(config)
     dp.update.middleware.register(DatabaseMiddleware(pool_connect))
-
-    # Обработчик уведомлений
-    scheduler = AsyncIOScheduler(timezone=tzoffset(None, 5.0 * 3600))
-    scheduler.start()
-    dp.update.middleware.register(ApschedulerMiddleware(scheduler))
 
     # Tortoise-ORM
     await Tortoise.init(config={
