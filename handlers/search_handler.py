@@ -18,6 +18,7 @@ async def start_search_process(callback: CallbackQuery):
                 f"Информация: {profile.info}\n\n"
     await callback.message.answer(text=text, reply_markup=search_kb)
     await callback.message.edit_reply_markup(None)
+    await callback.answer()
 
 
 @search_router.callback_query(F.data == "next")
@@ -33,8 +34,10 @@ async def next_search_process(callback: CallbackQuery):
                     f"Информация: {profile.info}\n\n"
         await callback.message.edit_reply_markup(None)
         await callback.message.answer(text=text, reply_markup=search_kb)
+        await callback.answer()
     else:
         await callback.message.answer(text="Пока что это всё, попробуйте ещё раз позже.")
+        await callback.answer()
 
 
 @search_router.callback_query(F.data == "my_info")
@@ -45,3 +48,4 @@ async def my_info_process(callback: CallbackQuery):
                 f"Возраст: {profile.age}\n\n" \
                 f"Информация: {profile.info}\n\n"
     await callback.message.answer(text=text)
+    await callback.answer()

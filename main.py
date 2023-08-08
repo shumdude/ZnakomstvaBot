@@ -1,20 +1,10 @@
 import asyncio
 import logging
-import asyncpg
 from aiogram.fsm.storage.memory import MemoryStorage
 from tortoise import Tortoise
 import handlers
 from aiogram import Bot, Dispatcher
 from config import Config, load_config
-# from middlewares import DatabaseMiddleware
-
-
-# Function to create pool with database
-# async def create_pool(config: Config) -> asyncpg.pool.Pool:
-#     return await asyncpg.create_pool(user=config.db.db_user,
-#                                      password=config.db.db_password,
-#                                      host=config.db.db_host,
-#                                      database=config.db.database)
 
 
 async def start():
@@ -31,10 +21,6 @@ async def start():
     bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     storage: MemoryStorage = MemoryStorage()  # Сменить на Redis
     dp: Dispatcher = Dispatcher(storage=storage)
-
-    # DatabaseMiddleware
-    # pool_connect = await create_pool(config)
-    # dp.update.middleware.register(DatabaseMiddleware(pool_connect))
 
     # Tortoise-ORM
     await Tortoise.init(config={
