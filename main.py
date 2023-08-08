@@ -6,15 +6,15 @@ from tortoise import Tortoise
 import handlers
 from aiogram import Bot, Dispatcher
 from config import Config, load_config
-from middlewares import DatabaseMiddleware
+# from middlewares import DatabaseMiddleware
 
 
 # Function to create pool with database
-async def create_pool(config: Config) -> asyncpg.pool.Pool:
-    return await asyncpg.create_pool(user=config.db.db_user,
-                                     password=config.db.db_password,
-                                     host=config.db.db_host,
-                                     database=config.db.database)
+# async def create_pool(config: Config) -> asyncpg.pool.Pool:
+#     return await asyncpg.create_pool(user=config.db.db_user,
+#                                      password=config.db.db_password,
+#                                      host=config.db.db_host,
+#                                      database=config.db.database)
 
 
 async def start():
