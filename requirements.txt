@@ -27,6 +27,7 @@ multidict==6.0.4
 packaging==23.1
 py==1.11.0
 pydantic==2.1.1
+pydantic-settings==2.0.2
 pydantic_core==2.4.0
 pypika-tortoise==0.1.6
 python-dateutil==2.8.2
