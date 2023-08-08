@@ -38,7 +38,12 @@ async def start():
 
     # Tortoise-ORM
     await Tortoise.init(config={
-        'connections': {'default': config.db_url()},
+        'connections': {'default': f"asyncpg://"
+                                   f"{config.db.db_user}:"
+                                   f"{config.db.db_password}@"
+                                   f"{config.db.db_host}:"
+                                   f"{config.db.db_port}/"
+                                   f"{config.db.database}"},
         'apps': {
             'app': {
                 'models': ['database.models', 'aerich.models'],
