@@ -14,7 +14,7 @@ class DatabaseSettings(BaseSettings):
 
 class TelegramSettings(BaseSettings):
     token: str = Field(env='BOT_TOKEN')
-    admin_ids: list[int] = Field(env='POSTGRES_HOST')
+    admin_ids: list[int] = Field(env='ADMIN_IDS')
 
 
 class Settings(BaseSettings):
