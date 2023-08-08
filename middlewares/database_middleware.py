@@ -2,7 +2,7 @@ import asyncpg
 from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
-from database import DBRequest
+# from database import DBRequest
 
 
 class DatabaseMiddleware(BaseMiddleware):
@@ -17,5 +17,5 @@ class DatabaseMiddleware(BaseMiddleware):
             data: Dict[str, Any]
     ) -> Any:
         async with self.connector.acquire() as connect:
-            data["db_request"] = DBRequest()
+            # data["db_request"] = DBRequest()
             return await handler(event, data)

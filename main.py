@@ -33,8 +33,8 @@ async def start():
     dp: Dispatcher = Dispatcher(storage=storage)
 
     # DatabaseMiddleware
-    pool_connect = await create_pool(config)
-    dp.update.middleware.register(DatabaseMiddleware(pool_connect))
+    # pool_connect = await create_pool(config)
+    # dp.update.middleware.register(DatabaseMiddleware(pool_connect))
 
     # Tortoise-ORM
     await Tortoise.init(config={

@@ -1,1 +1,1 @@
-from .db_requests import DBRequest
+from .db_requests import *
