@@ -1,5 +1,3 @@
-from config import Config, load_config
-
 LEXICON: dict[str, str] = {"start": "Приветствую! Я - бот знакомств (16+)\n\n"
                                     "Чтобы создать анкету, воспользуйтесь командой /registration",
                            "registration": "Для начала введи свой возраст (не менее 16 лет):\n\n"
@@ -12,19 +10,3 @@ LEXICON: dict[str, str] = {"start": "Приветствую! Я - бот зна�
                            "my_info": "Моя анкета",
                            "next": "Смотреть следующую анкету",
                            "start_search": "Начать поиск анкет"}
-
-config: Config = load_config('.env')
-TORTOISE_ORM = {
-    'connections': {'default': f"asyncpg://"
-                               f"{config.db.db_user}:"
-                               f"{config.db.db_password}@"
-                               f"{config.db.db_host}:"
-                               f"{config.db.db_port}/"
-                               f"{config.db.database}"},
-    'apps': {
-        'app': {
-            'models': ['database.models', 'aerich.models'],
-            'default_connection': 'default'
-        },
-    },
-}

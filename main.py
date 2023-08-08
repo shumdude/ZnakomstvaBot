@@ -4,7 +4,8 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from tortoise import Tortoise
 import handlers
 from aiogram import Bot, Dispatcher
-from config import Config, load_config
+from config import settings, TORTOISE_ORM
+from aerich import Command
 
 
 async def start():
@@ -13,32 +14,26 @@ async def start():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - [%(levelname)s] -  %(name)s - "
                                "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s")
-
     logger.info('Starting telegram bot')
 
-    # Config, Bot, Dispatcher
-    config: Config = load_config('.env')
-    bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    # Bot, Storage, Dispatcher
+    logger.info("Bot, Storage, Dispatcher...")
+    bot: Bot = Bot(token=settings.tg_bot.token, parse_mode='HTML')
     storage: MemoryStorage = MemoryStorage()  # Сменить на Redis
     dp: Dispatcher = Dispatcher(storage=storage)
 
     # Tortoise-ORM
-    await Tortoise.init(config={
-        'connections': {'default': f"asyncpg://"
-                                   f"{config.db.db_user}:"
-                                   f"{config.db.db_password}@"
-                                   f"{config.db.db_host}:"
-                                   f"{config.db.db_port}/"
-                                   f"{config.db.database}"},
-        'apps': {
-            'app': {
-                'models': ['database.models', 'aerich.models'],
-                'default_connection': 'default'
-            },
-        },
-    })
+    logger.info("Tortoise...")
+    await Tortoise.init(config=TORTOISE_ORM)
     await Tortoise.generate_schemas()
-    logger.info("Tortoise inited!")
+
+    # Migrations
+    logger.info("Migrations...")
+    command = Command(tortoise_config=settings, location="database/migrations/app")
+    await command.init()
+    await command.init_db(safe=True)
+    await command.migrate()
+    await command.upgrade(run_in_transaction=True)
 
     # Вносим роутеры в диспетчер
     logger.info("Register handlers...")
