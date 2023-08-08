@@ -9,14 +9,32 @@ services:
     restart: on-failure
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrations:
+    build: bot
+    command: sh -c "aerich upgrade"
+    env_file:
+      - ./.env
+    depends_on:
+        db:
+            condition: service_healthy
+
   bot:
     build: .
-    command: sh -c "aerich upgrade && python -m bot"
+    command: sh -c "python -m main"
     env_file:
       - ./.env
     restart: always
     depends_on:
-      - db
+      migrations:
+        condition: service_started
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
